@@ -3,3 +3,4 @@ hosts_backup: True
 hosts_set_hostname: True
 hosts_hostname: {}
 hosts_add_host: [{}]
+set_ansible_fqdn_as_hostname: false

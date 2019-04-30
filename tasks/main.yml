@@ -1,14 +1,24 @@
 ---
 - name: "Ensure system's hostname is set"
+  become: True
   hostname:
     name: "{{ hosts_hostname.hostname }}"
   when:
     - "hosts_hostname is defined"
     - "hosts_hostname.hostname is defined"
     - "hosts_set_hostname | default(True)"
+    - "set_ansible_fqdn_as_hostname == False"
+
+- name: "Ensure system's hostname is set"
   become: True
+  hostname:
+    name: "{{ ansible_fqdn }}"
+  when:
+    - "ansible_fqdn is defined"
+    - "set_ansible_fqdn_as_hostname"
 
 - name: "Configure /etc/hosts"
+  become: True
   template:
     src: "hosts.j2"
     dest: "/etc/hosts"
@@ -17,4 +27,3 @@
     group: "root"
     mode: "0644"
   when: "hosts_hostname is defined or hosts_add_hosts is defined"
-  become: True
