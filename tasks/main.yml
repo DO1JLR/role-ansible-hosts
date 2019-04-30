@@ -1,11 +1,12 @@
 ---
-- name: "Ensure system's hostname is set"
+- name: "Ensure system's FQDN hostname is set"
   become: True
   hostname:
-    name: "{{ hosts_hostname.hostname }}"
+    name: "{{ hosts_hostname.hostname }}.{{ hosts_hostname.domain }}"
   when:
     - "hosts_hostname is defined"
     - "hosts_hostname.hostname is defined"
+    - "hosts_hostname.domain is defined"
     - "hosts_set_hostname | default(True)"
     - "set_ansible_fqdn_as_hostname == False"
 
@@ -13,6 +14,13 @@
   become: True
   hostname:
     name: "{{ ansible_fqdn }}"
+  when:
+    - "ansible_fqdn is defined"
+    - "set_ansible_fqdn_as_hostname"
+
+- name: Tell me your hostname
+  debug:
+    msg: "set hostname to {{ ansible_fqdn }}"
   when:
     - "ansible_fqdn is defined"
     - "set_ansible_fqdn_as_hostname"
