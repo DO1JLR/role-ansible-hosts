@@ -8,22 +8,22 @@
     - "hosts_hostname.hostname is defined"
     - "hosts_hostname.domain is defined"
     - "hosts_set_hostname | default(True)"
-    - "set_ansible_fqdn_as_hostname == False"
+    - "set_ansible_fqdn_as_hostname|bool == False"
 
 - name: "Ensure system's hostname is set"
   become: True
   hostname:
     name: "{{ ansible_fqdn }}"
   when:
-    - "ansible_fqdn is defined"
-    - "set_ansible_fqdn_as_hostname"
+    - "ansible_fqdn is defined|bool"
+    - "set_ansible_fqdn_as_hostname|bool"
 
 - name: Tell me your hostname
   debug:
     msg: "set hostname to {{ ansible_fqdn }}"
   when:
-    - "ansible_fqdn is defined"
-    - "set_ansible_fqdn_as_hostname"
+    - "ansible_fqdn is defined|bool"
+    - "set_ansible_fqdn_as_hostname|bool"
 
 - name: "Configure /etc/hosts"
   become: True
